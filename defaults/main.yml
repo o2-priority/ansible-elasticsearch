@@ -1,0 +1,97 @@
+---
+elasticsearch_user:  elasticsearch
+elasticsearch_group: "{{ elasticsearch_user }}"
+
+elasticsearch_log_dir:     /var/log/elasticsearch
+elasticsearch_conf_dir:    /etc/elasticsearch
+elasticsearch_data_dir:    /var/lib/elasticsearch
+elasticsearch_home_dir:    /usr/share/elasticsearch
+elasticsearch_scripts_dir: /etc/elasticsearch/scripts
+elasticsearch_pid_dir:     /var/run/elasticsearch
+elasticsearch_gc_log_file: "{{ elasticsearch_log_dir }}/gc.log"
+
+####################
+##  Default Settings
+elasticsearch_javacmd:    /usr/bin/java
+elasticsearch_java_opts:  []
+elasticsearch_heap_size:
+elasticsearch_heap_newsize: 
+elasticsearch_direct_size:
+elasticsearch_restart_on_upgrade: false
+elasticsearch_startup_sleep_time: 5
+elasticsearch_max_open_files:     65535
+elasticsearch_max_locked_memory:                  # e.g. unlimited
+elasticsearch_max_map_count:      262144
+elasticsearch_use_gc_logging:     false
+
+############
+##  Package
+elasticsearch_version: 2.2
+elasticsearch_version_string: "{{ elasticsearch_version|string }}"
+elasticsearch_signing_key_url: "https://packages.elastic.co/GPG-KEY-elasticsearch"
+elasticsearch_apt_repo: "deb http://packages.elastic.co/elasticsearch/{{ elasticsearch_version_string.split('.')|first }}.x/debian stable main"
+
+###########
+##  Plugins
+elasticsearch_plugins: []
+
+###########
+##  Config
+elasticsearch_cluster_name:       # Mandatory
+elasticsearch_node_name:      "${HOSTNAME}"
+elasticsearch_node_rack:      "r1"
+elasticsearch_network_host:   "{{ ansible_default_ipv4.address }}"
+elasticsearch_http_port:      9200
+elasticsearch_transport_port: 9300
+elasticsearch_bootstrap_mlockall: false
+
+elasticsearch_discovery_zen_settings: {}            # See example config below
+elasticsearch_cloud_aws_settings:     {}            # See example config below
+elasticsearch_discovery_ec2_settings: {}            # See example config below
+elasticsearch_gateway_settings:       {}            # See example config below
+
+
+
+###################################
+##  Example Settings configuration
+###################################
+##
+## elasticsearch_discovery_zen_settings:
+##   "discovery.zen.ping.unicast.hosts":   '[ "1.1.1.1", "2.2.2.2" ]'
+##   "discovery.zen.minimum_master_nodes": 3
+## 
+## elasticsearch_cloud_aws_settings:
+##   "cloud.aws.region":               eu-west
+##   "cloud.aws.access_key":           someAccessKey
+##   "cloud.aws.secret_key":           someSecretKey
+##   "cloud.aws.protocol":             https
+##   "cloud.aws.s3.protocol":          http
+##   "cloud.aws.ec2.protocol":         http
+##   "cloud.aws.proxy.host":           proxy1.company.com
+##   "cloud.aws.proxy.port":           8083
+##   "cloud.aws.proxy.username":       myself
+##   "cloud.aws.proxy.password":       theBestPasswordEver!
+##   "cloud.aws.s3.proxy.host":        proxy1.company.com
+##   "cloud.aws.s3.proxy.port":        8083
+##   "cloud.aws.s3.proxy.username":    myself1
+##   "cloud.aws.s3.proxy.password":    theBestPasswordEver1!
+##   "cloud.aws.ec2.proxy.host":       proxy2.company.com
+##   "cloud.aws.ec2.proxy.port":       8083
+##   "cloud.aws.ec2.proxy.username":   myself2
+##   "cloud.aws.ec2.proxy.password":   theBestPasswordEver2!
+## 
+## elasticsearch_discovery_ec2_settings:
+##   "discovery.ec2.groups":          "sg1,sg2"    # comma separated list of sec group names or ids
+##   "discovery.ec2.host_type":       "private_ip" # private_ip, public_ip, private_dns, public_dns
+##   "discovery.ec2.any_group":       "true"       # true or false. Default "true"
+##   "discovery.ec2.ping_timeout":    "3s"         # Defaults to "3s"
+##   "discovery.ec2.node_cache_time": "10s"        # Defaults to "10s"
+##   "discovery.ec2.availability_zones":           # comma separated list
+##
+## See docs at, http://www.elastic.co/guide/en/elasticsearch/reference/current/modules-discovery.html
+##
+## elasticsearch_gateway_settings:                   
+##   "gateway.recover_after_nodes": 3s
+##
+## See docs at, https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-gateway.html
+

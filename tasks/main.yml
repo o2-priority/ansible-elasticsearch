@@ -1,0 +1,88 @@
+---
+
+- debug: msg='hello elasticsearch'
+
+- name: Download and install elasticsearch apt public signing key
+  apt_key: url="{{ elasticsearch_signing_key_url }}" state=present
+
+
+- name: Add the repository definition to apt sources list
+  apt_repository: repo="{{ elasticsearch_apt_repo }}" update_cache=yes state=present
+
+- name: Install elasticsearch
+  apt: name=elasticsearch state=present
+
+- name: Set mmap count kernel parameter for elasticsearch
+  template: src=sysctl.elasticsearch.conf.j2 dest=/etc/sysctl.d/60-elasticsearch.conf mode=0644
+  notify: Reload procps
+
+- name: Get list of installed elasticsearch plugins
+  shell: >
+    {{ elasticsearch_home_dir }}/bin/plugin list | \
+      grep -v 'Installed plugins' | awk '{print $2}'
+  register: plugins
+
+- debug: msg="Installed plugins - {{ plugins.stdout_lines|join(', ') }}"
+
+- name: Install elasticsearch plugin
+  shell: >
+    {{ elasticsearch_home_dir }}/bin/plugin install -b {{ item }}
+  when: item not in plugins.stdout_lines
+  with_items: "{{ elasticsearch_plugins }}"
+
+- name: Ensure elasticsearch home dir is created
+  file: 
+    path:  "{{ elasticsearch_home_dir }}" 
+    owner: "root"
+    group: "root"
+    mode:  0755
+    state: directory
+
+- name: Ensure elasticsearch data dir is created
+  file: 
+    path:  "{{ elasticsearch_data_dir }}" 
+    owner: "{{ elasticsearch_user }}"
+    group: "{{ elasticsearch_group }}"
+    mode:  0755
+    state: directory
+
+- name: Ensure elasticsearch conf dir is created
+  file: 
+    path:  "{{ elasticsearch_conf_dir }}" 
+    owner: "{{ elasticsearch_user }}"
+    group: "{{ elasticsearch_group }}"
+    mode:  0755
+    state: directory
+
+- name: Create elasticsearch config
+  template: 
+    src:   elasticsearch.yml.j2
+    dest:  "{{ elasticsearch_conf_dir }}/elasticsearch.yml"
+    owner: "root"
+    group: "{{ elasticsearch_group }}"
+    mode:  0644
+  notify: 
+    - Restart elasticsearch
+
+- name: Create elasticsearch logging config
+  copy: 
+    src:   logging.yml
+    dest:  "{{ elasticsearch_conf_dir }}/logging.yml"
+    owner: "root"
+    group: "{{ elasticsearch_group }}"
+    mode:  0644
+  notify: 
+    - Restart elasticsearch
+
+- name: Create elasticsearch default settings file
+  template: 
+    src:   etc.default.elasticsearch.j2
+    dest:  "/etc/default/elasticsearch"
+    owner: root
+    group: root
+    mode:  0644
+  notify: 
+    - Restart elasticsearch
+
+- name: Start elasticsearch
+  service: name=elasticsearch enabled=yes state=started
