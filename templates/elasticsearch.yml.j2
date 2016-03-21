@@ -95,7 +95,7 @@ http.port: {{ elasticsearch_http_port }}
 
 {% if elasticsearch_discovery_type %}
 discovery:
-	type: {{ elasticsearch_discovery_type }}
+  type: {{ elasticsearch_discovery_type }}
 {% endif -%}
 
 {% if elasticsearch_discovery_ec2_settings %}
