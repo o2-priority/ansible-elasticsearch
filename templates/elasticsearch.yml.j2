@@ -84,14 +84,19 @@ http.port: {{ elasticsearch_http_port }}
 {% for key,value in elasticsearch_discovery_zen_settings.iteritems() %}
 {{ key }}: "{{ value }}"
 {% endfor %}
-{% endif %}
+{% endif -%}
 
 {% if elasticsearch_cloud_aws_settings %}
 # AWS Cloud
 {% for key,value in elasticsearch_cloud_aws_settings.iteritems() %}
 {{ key }}: "{{ value }}"
 {% endfor %}
-{% endif %}
+{% endif -%}
+
+{% if elasticsearch_discovery_type %}
+discovery:
+	type: {{ elasticsearch_discovery_type }}
+{% endif -%}
 
 {% if elasticsearch_discovery_ec2_settings %}
 # EC2 Discovery

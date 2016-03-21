@@ -49,9 +49,10 @@ elasticsearch_network_bind_host:
 elasticsearch_network_publish_host:
 elasticsearch_bootstrap_mlockall: false
 
-elasticsearch_discovery_zen_settings: {}            # See example config below
+elasticsearch_discovery_type:                       # See example config below
 elasticsearch_cloud_aws_settings:     {}            # See example config below
 elasticsearch_discovery_ec2_settings: {}            # See example config below
+elasticsearch_discovery_zen_settings: {}            # See example config below
 elasticsearch_gateway_settings:       {}            # See example config below
 
 
@@ -59,6 +60,8 @@ elasticsearch_gateway_settings:       {}            # See example config below
 ###################################
 ##  Example Settings configuration
 ###################################
+##
+## elasticsearch_discovery_type: ec2
 ##
 ## elasticsearch_discovery_zen_settings:
 ##   "discovery.zen.ping.unicast.hosts":   '[ "1.1.1.1", "2.2.2.2" ]'
