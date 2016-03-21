@@ -26,6 +26,9 @@ node.name: {{ elasticsearch_node_name }}
 #
 node.rack: {{ elasticsearch_node_rack }}
 
+node.master: {{ elasticsearch_is_master_node|bool|lower }}
+node.data: {{ elasticsearch_is_data_node|bool|lower }}
+
 # ----------------------------------- Paths ------------------------------------
 #
 # Path to directory where to store the data (separate multiple locations by comma):
@@ -53,6 +56,12 @@ bootstrap.mlockall: {{ elasticsearch_bootstrap_mlockall|bool|lower }}
 #
 network.host: {{ elasticsearch_network_host }}
 
+{% if elasticsearch_network_bind_host %}
+network.bind_host: {{ elasticsearch_network_bind_host }}
+{% endif %}
+{% if elasticsearch_network_publish_host %}
+network.publish_host: {{ elasticsearch_network_publish_host }}
+{% endif %}
 # Set a custom port for HTTP:
 #
 http.port: {{ elasticsearch_http_port }}

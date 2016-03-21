@@ -40,9 +40,13 @@ elasticsearch_plugins: []
 elasticsearch_cluster_name:       # Mandatory
 elasticsearch_node_name:      "${HOSTNAME}"
 elasticsearch_node_rack:      "r1"
-elasticsearch_network_host:   "{{ ansible_default_ipv4.address }}"
+elasticsearch_is_master_node: true
+elasticsearch_is_data_node:   true
 elasticsearch_http_port:      9200
 elasticsearch_transport_port: 9300
+elasticsearch_network_host:   "{{ ansible_default_ipv4.address }}"
+elasticsearch_network_bind_host:
+elasticsearch_network_publish_host:
 elasticsearch_bootstrap_mlockall: false
 
 elasticsearch_discovery_zen_settings: {}            # See example config below
