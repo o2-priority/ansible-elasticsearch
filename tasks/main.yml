@@ -1,7 +1,5 @@
 ---
 
-- debug: msg='hello elasticsearch'
-
 - name: Download and install elasticsearch apt public signing key
   apt_key: url="{{ elasticsearch_signing_key_url }}" state=present
 
