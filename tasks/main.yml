@@ -4,7 +4,7 @@
   apt_key: url="{{ elasticsearch_signing_key_url }}" state=present
 
 
-- name: Add the repository definition to apt sources list
+- name: Add elasticsearch apt repository definition to apt sources list
   apt_repository: repo="{{ elasticsearch_apt_repo }}" update_cache=yes state=present
 
 - name: Install elasticsearch
