@@ -19,7 +19,7 @@ elasticsearch_heap_newsize:
 elasticsearch_direct_size:
 elasticsearch_restart_on_upgrade: false
 elasticsearch_startup_sleep_time: 5
-elasticsearch_max_open_files:     65535
+elasticsearch_max_open_files:     65536
 elasticsearch_max_locked_memory:                  # e.g. unlimited
 elasticsearch_max_map_count:      262144
 elasticsearch_use_gc_logging:     false
