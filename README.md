@@ -1,5 +1,5 @@
-Logstash
-========
+Elasticsearch
+=============
 
 Ansible role to install and configure Elasticsearch.
 
