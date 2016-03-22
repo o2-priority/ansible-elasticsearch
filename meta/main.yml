@@ -11,6 +11,6 @@ galaxy_info:
         - trusty
   galaxy_tags:
     - elk
-    - logstash
+    - elasticsearch
 dependencies: []
   
