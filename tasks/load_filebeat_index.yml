@@ -2,6 +2,7 @@
 
 - name: Download filebeat index template for loading into elasticsearch
   get_url: url="{{ elasticsearch_filebeat_index_template_url }}" dest=/tmp/filebeat.template.json
+  become: no
   delegate_to: 127.0.0.1
 
 - name: Load filebeat index template in elasticsearch
