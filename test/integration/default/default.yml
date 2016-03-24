@@ -7,6 +7,10 @@
     elasticsearch_cluster_name: kitchenCluster
     elasticsearch_load_filebeat_index: yes
 
+  pre_tasks:
+    - name: Install curl
+      apt: name=curl state=present
+
   roles:
     - wunzeco.java
     - ansible-elasticsearch

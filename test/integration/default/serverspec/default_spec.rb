@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'socket'
 
 elasticsearch_user     = 'elasticsearch'
 elasticsearch_group    = elasticsearch_user
@@ -7,6 +8,8 @@ elasticsearch_pid_dir  = '/var/run/elasticsearch'
 elasticsearch_conf_dir = '/etc/elasticsearch'
 elasticsearch_data_dir = '/var/lib/elasticsearch'
 elasticsearch_home_dir = '/usr/share/elasticsearch'
+
+elasticsearch_network_host = Socket.ip_address_list.detect{ |intf| intf.ipv4_private? }.ip_address
 
 describe group(elasticsearch_group) do
   it { should exist }
@@ -76,4 +79,9 @@ end
 
 describe service('elasticsearch') do
   it { should be_running }
+end
+
+describe command("curl -XHEAD -i -s -o /dev/null -w '%{http_code}' #{elasticsearch_network_host}:9200/_template/filebeat") do
+  its(:exit_status) { should eq 0 }
+  its(:stdout) { should match %r(200) }
 end
