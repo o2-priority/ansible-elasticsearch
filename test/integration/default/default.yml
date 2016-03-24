@@ -5,6 +5,7 @@
     java_package: oracle-java8-installer
     elasticsearch_plugins: [ cloud-aws ]
     elasticsearch_cluster_name: kitchenCluster
+    elasticsearch_load_filebeat_index: yes
 
   roles:
     - wunzeco.java

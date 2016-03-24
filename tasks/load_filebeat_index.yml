@@ -1,0 +1,13 @@
+---
+
+- name: Download filebeat index template for loading into elasticsearch
+  get_url: url="{{ elasticsearch_filebeat_index_template_url }}" dest=/tmp/filebeat.template.json
+  delegate_to: 127.0.0.1
+
+- debug: msg="{{ lookup('file', '/tmp/filebeat.template.json') }}"
+
+- name: Load filebeat index template in elasticsearch
+  uri: 
+    url: "http://{{ elasticsearch_network_host }}:9200/_template/filebeat?pretty"
+    method: PUT
+    body: '{{ lookup("file","/tmp/filebeat.template.json")|string }}'
