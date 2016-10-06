@@ -89,6 +89,3 @@
   wait_for: 
     host: "{{ elasticsearch_network_host }}"
     port: "{{ elasticsearch_http_port }}"
-
-- include: load_filebeat_index.yml
-  when: elasticsearch_load_filebeat_index

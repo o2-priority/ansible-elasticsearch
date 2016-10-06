@@ -80,8 +80,3 @@ end
 describe service('elasticsearch') do
   it { should be_running }
 end
-
-describe command("curl -XHEAD -i -s -o /dev/null -w '%{http_code}' #{elasticsearch_network_host}:9200/_template/filebeat") do
-  its(:exit_status) { should eq 0 }
-  its(:stdout) { should match %r(200) }
-end

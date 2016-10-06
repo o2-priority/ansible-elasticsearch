@@ -56,13 +56,6 @@ elasticsearch_discovery_zen_settings: {}            # See example config below
 elasticsearch_gateway_settings:       {}            # See example config below
 
 
-###########################
-##  Extras - Filebeat Index
-elasticsearch_load_filebeat_index: false
-elasticsearch_filebeat_index_template_url: "https://raw.githubusercontent.com/elastic/filebeat/master/etc/filebeat.template.json"
-
-
-
 
 ###################################
 ##  Example Settings configuration
