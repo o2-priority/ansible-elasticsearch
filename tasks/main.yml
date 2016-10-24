@@ -1,14 +1,7 @@
 ---
 
-- name: Download and install elasticsearch apt public signing key
-  apt_key: url="{{ elasticsearch_signing_key_url }}" state=present
-
-
-- name: Add elasticsearch apt repository definition to apt sources list
-  apt_repository: repo="{{ elasticsearch_apt_repo }}" update_cache=yes state=present
-
-- name: Install elasticsearch
-  apt: name=elasticsearch state=present
+- name: Elasticsearch Install
+  include: "install-{{ ansible_os_family|lower }}.yml"
 
 - name: Set mmap count kernel parameter for elasticsearch
   template: src=sysctl.elasticsearch.conf.j2 dest=/etc/sysctl.d/60-elasticsearch.conf mode=0644

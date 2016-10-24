@@ -1,0 +1,19 @@
+---
+
+- name: Download and install elasticsearch gpg public signing key
+  rpm_key:
+    key:   "{{ elasticsearch_signing_key_url }}"
+    state: present
+
+- name: Add elasticsearch yum repository for elasticsearch
+  template:
+    src:   elasticsearch.yum.repo.j2
+    dest:  /etc/yum.repos.d/elasticsearch.repo
+    owner: root
+    group: root
+    mode:  0644
+
+- name: Install elasticsearch
+  yum:
+    name:  "elasticsearch-{{ elasticsearch_version|default('*') }}"
+    state: present

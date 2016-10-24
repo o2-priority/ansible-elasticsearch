@@ -25,6 +25,16 @@ This role has been tested with Elasticsearch v2.2 only
     - wunzeco.elasticsearch
 ```
 
+
+## Testing
+
+To test this role, run:
+
+```
+kitchen test
+```
+
+
 ## Dependencies:
 
 None
