@@ -26,7 +26,7 @@ elasticsearch_use_gc_logging:     false
 
 ############
 ##  Package
-elasticsearch_version: 2.2
+elasticsearch_version: 2.4.1
 elasticsearch_version_string: "{{ elasticsearch_version|string }}"
 elasticsearch_version_major: "{{ elasticsearch_version_string.split('.')|first }}"
 elasticsearch_signing_key_url: "https://packages.elastic.co/GPG-KEY-elasticsearch"

@@ -6,10 +6,15 @@
     elasticsearch_plugins: [ cloud-aws ]
     elasticsearch_cluster_name: kitchenCluster
 
-  pre_tasks:
-    - name: Install curl
-      apt: name=curl state=present
-
   roles:
     - wunzeco.java
     - ansible-elasticsearch
+
+  pre_tasks:
+    - name: Install curl | Debian
+      apt: name=curl state=present
+      when: ansible_os_family|lower == 'debian'
+
+    - name: Install curl | Redhat
+      yum: name=curl state=present
+      when: ansible_os_family|lower == 'redhat'
