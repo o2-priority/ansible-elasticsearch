@@ -4,8 +4,16 @@
   include: "install-{{ ansible_os_family|lower }}.yml"
 
 - name: Set mmap count kernel parameter for elasticsearch
-  template: src=sysctl.elasticsearch.conf.j2 dest=/etc/sysctl.d/60-elasticsearch.conf mode=0644
-  notify: Reload procps
+  template:
+    src:  sysctl.elasticsearch.conf.j2
+    dest: /etc/sysctl.d/60-elasticsearch.conf
+    mode: 0644
+  register: mmap
+
+- name: Load in mmap count kernel parameter for elasticsearch
+  shell: >
+      sysctl -p /etc/sysctl.d/60-elasticsearch.conf
+  when: mmap|changed
 
 - name: Get list of installed elasticsearch plugins
   shell: >

@@ -1,7 +1,4 @@
 ---
 
-- name: Reload procps
-  service: name=procps state=reloaded
-
 - name: Restart elasticsearch
   service: name=elasticsearch state=restarted
