@@ -13,7 +13,7 @@ galaxy_info:
         - precise
         - trusty
   galaxy_tags:
-    - elk
     - elasticsearch
+    - elk
 dependencies: []
   
