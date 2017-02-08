@@ -6,7 +6,11 @@
     elasticsearch_plugins: [ discovery-ec2, repository-s3 ]
     elasticsearch_cluster_name: kitchenCluster
 
-  pre_tasks:
+  roles:
+    - wunzeco.java
+    - ansible-elasticsearch
+
+  post_tasks:
     - name: Install curl | Debian
       apt: name=curl state=present
       when: ansible_os_family|lower == 'debian'
@@ -14,15 +18,3 @@
     - name: Install curl | Redhat
       yum: name=curl state=present
       when: ansible_os_family|lower == 'redhat'
-
-    # Workaround for error - "max number of threads [1848] for user [elasticsearch] is too low, increase to at least [2048]"
-    - name: Increase max user processes on virtualbox VM from default 1848
-      pam_limits:
-        domain: '*'
-        limit_type: '-'
-        limit_item: nproc
-        value: 2048
-
-  roles:
-    - wunzeco.java
-    - ansible-elasticsearch
