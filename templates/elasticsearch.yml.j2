@@ -24,7 +24,11 @@ node.name: {{ elasticsearch_node_name }}
 
 # Add custom attributes to the node:
 #
+{% if elasticsearch_version_major == 2 %}
 node.rack: {{ elasticsearch_node_rack }}
+{% else %}
+node.attr.rack: {{ elasticsearch_node_rack }}
+{% endif %}
 
 node.master: {{ elasticsearch_is_master_node|bool|lower }}
 node.data: {{ elasticsearch_is_data_node|bool|lower }}
@@ -43,10 +47,15 @@ path.logs: {{ elasticsearch_log_dir }}
 #
 # Lock the memory on startup:
 #
+{% if elasticsearch_version_major == 2 %}
 bootstrap.mlockall: {{ elasticsearch_bootstrap_mlockall|bool|lower }}
+{% else %}
+bootstrap.memory_lock:  {{ elasticsearch_bootstrap_memory_lock|default(true)|bool|lower }}
+{% endif %}
 
-# Make sure that the `ES_HEAP_SIZE` environment variable is set to about half the memory
-# available on the system and that the owner of the process is allowed to use this limit.
+# Make sure that the heap size is set to about half the memory available
+# on the system and that the owner of the process is allowed to use this
+# limit.
 #
 # Elasticsearch performs poorly when the system is swapping the memory.
 #

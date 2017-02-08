@@ -18,7 +18,7 @@ This role has been tested with Elasticsearch v2.2 only
 - hosts: eshost
 
   vars:
-    elasticsearch_version: 2.2
+    elasticsearch_version: 5.2.0
     elasticsearch_cluster_name: myCluster
 
   roles:

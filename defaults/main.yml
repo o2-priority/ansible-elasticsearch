@@ -9,6 +9,7 @@ elasticsearch_home_dir:    /usr/share/elasticsearch
 elasticsearch_scripts_dir: /etc/elasticsearch/scripts
 elasticsearch_pid_dir:     /var/run/elasticsearch
 elasticsearch_gc_log_file: "{{ elasticsearch_log_dir }}/gc.log"
+elasticsearch_plugin_cmd: "{{ elasticsearch_home_dir }}/bin/elasticsearch-plugin"
 
 ####################
 ##  Default Settings
@@ -20,17 +21,17 @@ elasticsearch_direct_size:
 elasticsearch_restart_on_upgrade: false
 elasticsearch_startup_sleep_time: 5
 elasticsearch_max_open_files:     65536
-elasticsearch_max_locked_memory:                  # e.g. unlimited
+elasticsearch_max_locked_memory:  unlimited
 elasticsearch_max_map_count:      262144
 elasticsearch_use_gc_logging:     false
 
 ############
 ##  Package
-elasticsearch_version: 2.4.1
+elasticsearch_version: 5.2.0
 elasticsearch_version_string:   "{{ elasticsearch_version|string }}"
 elasticsearch_version_major:    "{{ elasticsearch_version_string.split('.')|first }}"
 elasticsearch_signing_key_url:  "https://packages.elastic.co/GPG-KEY-elasticsearch"
-elasticsearch_apt_repo:         "deb https://packages.elastic.co/elasticsearch/{{ elasticsearch_version_major }}.x/debian stable main"
+elasticsearch_apt_repo:         "deb https://artifacts.elastic.co/packages/{{ elasticsearch_version_major }}.x/apt stable main"
 elasticsearch_yum_repo_baseurl: "https://packages.elastic.co/elasticsearch/{{ elasticsearch_version_major }}.x/centos"
 
 ###########
@@ -49,7 +50,12 @@ elasticsearch_transport_port: 9300
 elasticsearch_network_host:   "{{ ansible_default_ipv4.address }}"
 elasticsearch_network_bind_host:
 elasticsearch_network_publish_host:
-elasticsearch_bootstrap_mlockall: false
+elasticsearch_bootstrap_mlockall: false     ## REMOVED in v5.x
+
+### v5.x config properties
+elasticsearch_bootstrap_memory_lock: true
+#elasticsearch_heap_size_min:              # e.g. "2g". Default is 40% of ansible_memtotal_mb
+#elasticsearch_heap_size_max:              # e.g. "2g". Default is 40% of ansible_memtotal_mb
 
 elasticsearch_discovery_type:                       # See example config below
 elasticsearch_cloud_aws_settings:     {}            # See example config below
