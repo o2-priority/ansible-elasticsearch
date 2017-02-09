@@ -1,6 +1,15 @@
 [elasticsearch-{{ elasticsearch_version_major }}.x]
 name=Elasticsearch repository for {{ elasticsearch_version_major }}.x packages
+{% if elasticsearch_version_major|int >= 5 %}
 baseurl={{ elasticsearch_yum_repo_baseurl }}
 gpgcheck=1
 gpgkey={{ elasticsearch_signing_key_url }}
 enabled=1
+autorefresh=1
+type=rpm-md
+{% else %}
+baseurl={{ elasticsearch_2_yum_repo_baseurl }}
+gpgcheck=1
+gpgkey={{ elasticsearch_signing_key_url }}
+enabled=1
+{% endif %}
