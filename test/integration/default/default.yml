@@ -3,7 +3,8 @@
 
   vars:
     java_package: oracle-java8-installer
-    elasticsearch_plugins: [ discovery-ec2, repository-s3 ]
+    elasticsearch_plugins_install: [ discovery-ec2, repository-s3, analysis-icu ]
+    elasticsearch_plugins_remove:  [ analysis-icu, discovery-file ]
     elasticsearch_cluster_name: kitchenCluster
 
   roles:

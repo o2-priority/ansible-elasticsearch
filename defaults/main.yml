@@ -9,7 +9,6 @@ elasticsearch_home_dir:    /usr/share/elasticsearch
 elasticsearch_scripts_dir: /etc/elasticsearch/scripts
 elasticsearch_pid_dir:     /var/run/elasticsearch
 elasticsearch_gc_log_file: "{{ elasticsearch_log_dir }}/gc.log"
-elasticsearch_plugin_cmd: "{{ elasticsearch_home_dir }}/bin/elasticsearch-plugin"
 
 ####################
 ##  Default Settings
@@ -39,7 +38,11 @@ elasticsearch_2_yum_repo_baseurl: "https://packages.elastic.co/elasticsearch/{{ 
 
 ###########
 ##  Plugins
-elasticsearch_plugins: []
+elasticsearch_update_plugins:  false
+elasticsearch_plugins:         []
+elasticsearch_plugins_install: "{{ elasticsearch_plugins|default([]) }}"
+elasticsearch_plugins_remove:  []
+elasticsearch_plugin_cmd:      "{{ elasticsearch_home_dir }}/bin/elasticsearch-plugin"
 
 ###########
 ##  Config

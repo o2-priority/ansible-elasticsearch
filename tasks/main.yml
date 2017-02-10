@@ -3,30 +3,8 @@
 - name: Elasticsearch Install
   include: "install-{{ ansible_os_family|lower }}.yml"
 
-#- name: Set mmap count kernel parameter for elasticsearch
-#  template:
-#    src:  sysctl.elasticsearch.conf.j2
-#    dest: /etc/sysctl.d/60-elasticsearch.conf
-#    mode: 0644
-#  register: mmap
-#
-#- name: Load in mmap count kernel parameter for elasticsearch
-#  shell: >
-#      sysctl -p /etc/sysctl.d/60-elasticsearch.conf
-#  when: mmap|changed
-
-- name: Set elasticsearch plugin cmd
-  set_fact:
-    elasticsearch_plugin_cmd: "{{ elasticsearch_home_dir }}/bin/plugin"
-    _list_plugins_cmd: "| grep -v 'Installed plugins' | awk '{print $2}'"
-  when: elasticsearch_version_major == 2
-
-- name: Get list of installed elasticsearch plugins
-  shell: >
-    {{ elasticsearch_plugin_cmd }} list {{ _list_plugins_cmd_filter|default('') }}
-  register: plugins
-
-- debug: msg="Installed plugins - {{ plugins.stdout_lines|join(', ') }}"
+- name: Elasticsearch Plugins
+  include: plugins.yml
 
 - name: Install elasticsearch plugin
   shell: >

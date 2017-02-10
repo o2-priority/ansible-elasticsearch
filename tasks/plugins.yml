@@ -1,0 +1,26 @@
+---
+
+- name: Set elasticsearch plugin cmd
+  set_fact:
+    elasticsearch_plugin_cmd: "{{ elasticsearch_home_dir }}/bin/plugin"
+    _list_plugins_cmd: "| grep -v 'Installed plugins' | awk '{print $2}'"
+  when: elasticsearch_version_major == 2
+
+- name: Get list of installed elasticsearch plugins
+  shell: >
+      {{ elasticsearch_plugin_cmd }} list {{ _list_plugins_cmd_filter|default('') }}
+  register: plugins
+  
+- debug: msg="Installed plugins - {{ plugins.stdout_lines|join(', ') }}"
+
+- name: Install elasticsearch plugins
+  shell: >
+      {{ elasticsearch_plugin_cmd }} install {{ item }}
+  with_items: "{{ elasticsearch_plugins_install }}"
+  when: item not in plugins.stdout_lines and item not in elasticsearch_plugins_remove
+
+- name: Remove elasticsearch plugins
+  shell: >
+      {{ elasticsearch_plugin_cmd }} remove {{ item }}
+  with_items: "{{ elasticsearch_plugins_remove }}"
+  when: item in plugins.stdout_lines
