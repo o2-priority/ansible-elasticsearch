@@ -4,7 +4,7 @@
   set_fact:
     elasticsearch_plugin_cmd: "{{ elasticsearch_home_dir }}/bin/plugin"
     _list_plugins_cmd: "| grep -v 'Installed plugins' | awk '{print $2}'"
-  when: elasticsearch_version_major == 2
+  when: elasticsearch_major_version == 2
 
 - name: Get list of installed elasticsearch plugins
   shell: >

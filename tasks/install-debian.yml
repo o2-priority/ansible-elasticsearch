@@ -10,14 +10,14 @@
     repo:         "{{ elasticsearch_2_apt_repo }}"
     update_cache: yes
     state:        present
-  when: elasticsearch_version_major|int < 5
+  when: elasticsearch_major_version|int < 5
 
 - name: Add elasticsearch apt repository definition to apt sources list | v5.x or later
   apt_repository:
     repo:         "{{ elasticsearch_apt_repo }}"
     update_cache: yes
     state:        present
-  when: elasticsearch_version_major|int >= 5
+  when: elasticsearch_major_version|int >= 5
 
 - name: Install elasticsearch
   apt: 

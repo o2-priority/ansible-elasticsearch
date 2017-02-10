@@ -17,7 +17,7 @@ LOG_DIR={{ elasticsearch_log_dir }}
 # Elasticsearch PID directory
 PID_DIR={{ elasticsearch_pid_dir }}
 
-{% if elasticsearch_version_major == 2 %}
+{% if elasticsearch_major_version == 2 %}
 # Heap size defaults to 256m min, 1g max
 # Set ES_HEAP_SIZE to 50% of available RAM, but no more than 31g
 {% if elasticsearch_heap_size|default(false) %}
@@ -56,7 +56,7 @@ ES_RESTART_ON_UPGRADE={{ elasticsearch_restart_on_upgrade|string|lower }}
 #ES_RESTART_ON_UPGRADE=true
 {% endif %}
 
-{% if elasticsearch_version_major == 2 %}
+{% if elasticsearch_major_version == 2 %}
 # Path to the GC log file
 {% if elasticsearch_use_gc_logging %}
 ES_GC_LOG_FILE={{ elasticsearch_gc_log_file }}

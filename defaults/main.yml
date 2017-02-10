@@ -28,13 +28,13 @@ elasticsearch_use_gc_logging:     false
 ##  Package
 elasticsearch_version: 5.2.0
 elasticsearch_version_string:   "{{ elasticsearch_version|string }}"
-elasticsearch_version_major:    "{{ elasticsearch_version_string.split('.')|first }}"
+elasticsearch_major_version:    "{{ elasticsearch_version_string.split('.')|first }}"
 elasticsearch_signing_key_url:  "https://packages.elastic.co/GPG-KEY-elasticsearch"
-elasticsearch_apt_repo:         "deb https://artifacts.elastic.co/packages/{{ elasticsearch_version_major }}.x/apt stable main"
-elasticsearch_yum_repo_baseurl: "https://artifacts.elastic.co/packages/{{ elasticsearch_version_major }}.x/yum"
+elasticsearch_apt_repo:         "deb https://artifacts.elastic.co/packages/{{ elasticsearch_major_version }}.x/apt stable main"
+elasticsearch_yum_repo_baseurl: "https://artifacts.elastic.co/packages/{{ elasticsearch_major_version }}.x/yum"
 
-elasticsearch_2_apt_repo:         "deb https://packages.elastic.co/elasticsearch/{{ elasticsearch_version_major }}.x/debian stable main"
-elasticsearch_2_yum_repo_baseurl: "https://packages.elastic.co/elasticsearch/{{ elasticsearch_version_major }}.x/centos"
+elasticsearch_2_apt_repo:         "deb https://packages.elastic.co/elasticsearch/{{ elasticsearch_major_version }}.x/debian stable main"
+elasticsearch_2_yum_repo_baseurl: "https://packages.elastic.co/elasticsearch/{{ elasticsearch_major_version }}.x/centos"
 
 ###########
 ##  Plugins

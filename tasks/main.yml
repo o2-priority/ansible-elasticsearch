@@ -54,7 +54,7 @@
     owner: "root"
     group: "{{ elasticsearch_group }}"
     mode:  0644
-  when: elasticsearch_version_major >= 5
+  when: elasticsearch_major_version >= 5
   notify: 
     - Restart elasticsearch
 
@@ -67,7 +67,7 @@
     owner: "root"
     group: "{{ elasticsearch_group }}"
     mode:  0644
-  when: elasticsearch_version_major < 5
+  when: elasticsearch_major_version < 5
   notify: 
     - Restart elasticsearch
 
