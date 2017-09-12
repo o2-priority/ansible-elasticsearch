@@ -60,7 +60,7 @@
 
 #- pause: minutes=10
 
-- name: Create elasticsearch logging config
+- name: Create elasticsearch logging config | Elasticsearch < 5
   copy: 
     src:   logging.yml
     dest:  "{{ elasticsearch_conf_dir }}/logging.yml"
@@ -69,6 +69,17 @@
     mode:  0644
   when: elasticsearch_major_version < 5
   notify: 
+    - Restart elasticsearch
+
+- name: Create elasticsearch logging config | Elasticsearch 5
+  template:
+    src:   log4j2.properties.j2
+    dest:  "{{ elasticsearch_conf_dir }}/log4j2.properties"
+    owner: "root"
+    group: "{{ elasticsearch_group }}"
+    mode:  0660
+  when: elasticsearch_major_version == 5 and elasticsearch_manage_log4j
+  notify:
     - Restart elasticsearch
 
 - name: Create elasticsearch scripts dir
