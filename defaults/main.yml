@@ -58,6 +58,11 @@ elasticsearch_network_bind_host:
 elasticsearch_network_publish_host:
 elasticsearch_bootstrap_mlockall: false     ## REMOVED in v5.x
 
+###########
+##  Logging
+elasticsearch_manage_log4j: false
+elasticsearch_logger_action_level: debug
+
 ### v5.x config properties
 elasticsearch_bootstrap_memory_lock: true
 #elasticsearch_heap_size_min:              # e.g. "2g". Default is 40% of ansible_memtotal_mb
