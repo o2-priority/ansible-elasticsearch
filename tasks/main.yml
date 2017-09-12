@@ -78,7 +78,7 @@
     owner: "root"
     group: "{{ elasticsearch_group }}"
     mode:  0660
-  when: elasticsearch_major_version == 5 and elasticsearch_manage_log4j
+  when: elasticsearch_major_version == "5" and elasticsearch_manage_log4j
   notify:
     - Restart elasticsearch
 
