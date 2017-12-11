@@ -71,8 +71,17 @@
 # use our provided JNA always versus the system one
 -Djna.nosys=true
 
-# flag to explicitly tell Netty to not use unsafe
+# flags to configure Netty
 -Dio.netty.noUnsafe=true
+-Dio.netty.noKeySetOptimization=true
+{% if elasticsearch_version|version_compare('5.2.0', '>=') %}
+-Dio.netty.recycler.maxCapacityPerThread=0
+{% endif %}
+
+# log4j 2
+-Dlog4j.shutdownHookEnabled=false
+-Dlog4j2.disable.jmx=true
+-Dlog4j.skipJansi=true
 
 ## heap dumps
 
