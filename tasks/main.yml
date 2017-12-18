@@ -92,6 +92,17 @@
   notify:
     - Restart elasticsearch
 
+- name: Create elasticsearch logging config | Elasticsearch 6
+  template:
+    src:   log4j2.properties.es6.j2
+    dest:  "{{ elasticsearch_conf_dir }}/log4j2.properties"
+    owner: "root"
+    group: "{{ elasticsearch_group }}"
+    mode:  0660
+  when: elasticsearch_major_version == "6" and elasticsearch_manage_log4j
+  notify:
+    - Restart elasticsearch
+
 - name: Create elasticsearch scripts dir
   file: 
     path:  "{{ elasticsearch_scripts_dir }}"
