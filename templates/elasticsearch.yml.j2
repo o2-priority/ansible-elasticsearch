@@ -95,9 +95,13 @@ http.port: {{ elasticsearch_http_port }}
 {% endfor %}
 {% endif -%}
 
-{% if elasticsearch_cloud_aws_settings %}
+{% if elasticsearch_cloud_aws_settings and elasticsearch_major_version != "6" %}
 # AWS Cloud
 {% for key,value in elasticsearch_cloud_aws_settings.iteritems() %}
+{{ key }}: "{{ value }}"
+{% endfor %}
+{% elif elasticsearch_cloud_aws_settings and elasticsearch_major_version == "6" %}
+{% for key,value in elasticsearch_cloud_aws_settings.iteritems() if key != 'cloud.aws.region' %}
 {{ key }}: "{{ value }}"
 {% endfor %}
 {% endif -%}
