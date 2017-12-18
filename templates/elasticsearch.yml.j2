@@ -87,7 +87,9 @@ http.port: {{ elasticsearch_http_port }}
 #
 # Prevent the "split brain" by configuring the majority of nodes (total number of nodes / 2 + 1):
 #
-# discovery.zen.minimum_master_nodes: 3
+{% if elasticsearch_minimum_master_nodes %}
+discovery.zen.minimum_master_nodes: {{ elasticsearch_minimum_master_nodes }}
+{% endif %}
 {% if elasticsearch_discovery_zen_settings %}
 # Zen Discovery
 {% for key,value in elasticsearch_discovery_zen_settings.iteritems() %}
