@@ -95,8 +95,8 @@ http.port: {{ elasticsearch_http_port }}
 {% endfor %}
 {% endif -%}
 
-{% if elasticsearch_cloud_aws_settings and elasticsearch_major_version != "6" %}
 # AWS Cloud
+{% if elasticsearch_cloud_aws_settings and elasticsearch_major_version != "6" %}
 {% for key,value in elasticsearch_cloud_aws_settings.iteritems() %}
 {{ key }}: "{{ value }}"
 {% endfor %}
@@ -106,9 +106,11 @@ http.port: {{ elasticsearch_http_port }}
 {% endfor %}
 {% endif -%}
 
-{% if elasticsearch_discovery_type %}
+{% if elasticsearch_discovery_type and elasticsearch_major_version != "6" %}
 discovery:
   type: {{ elasticsearch_discovery_type }}
+{% elif elasticsearch_discovery_type and elasticsearch_major_version == "6" %}
+discovery.zen.hosts_provider: ec2
 {% endif -%}
 
 {% if elasticsearch_discovery_ec2_settings %}
