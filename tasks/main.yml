@@ -3,6 +3,16 @@
 - name: Elasticsearch Install
   include: "install-{{ ansible_os_family|lower }}.yml"
 
+- name: Create elasticsearch default settings file
+  template:
+    src:   etc.default.elasticsearch.j2
+    dest:  "/etc/default/elasticsearch"
+    owner: root
+    group: root
+    mode:  0644
+  notify:
+    - Restart elasticsearch
+
 - name: Elasticsearch Plugins
   include: plugins.yml
 
@@ -99,16 +109,6 @@
     group: "{{ elasticsearch_group }}"
     mode:  0755
     state: directory
-  notify: 
-    - Restart elasticsearch
-
-- name: Create elasticsearch default settings file
-  template: 
-    src:   etc.default.elasticsearch.j2
-    dest:  "/etc/default/elasticsearch"
-    owner: root
-    group: root
-    mode:  0644
   notify: 
     - Restart elasticsearch
 
