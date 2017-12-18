@@ -106,6 +106,7 @@ discovery.zen.minimum_master_nodes: {{ elasticsearch_minimum_master_nodes }}
 {% for key,value in elasticsearch_cloud_aws_settings.iteritems() if key != 'cloud.aws.region' %}
 {{ key }}: "{{ value }}"
 {% endfor %}
+discovery.ec2.endpoint: ec2.eu-west-1.amazonaws.com
 {% endif -%}
 
 {% if elasticsearch_discovery_type and elasticsearch_major_version != "6" %}
