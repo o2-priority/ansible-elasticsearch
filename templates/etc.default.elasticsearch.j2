@@ -76,6 +76,7 @@ ES_GC_LOG_FILE={{ elasticsearch_gc_log_file }}
 
 # SysV init.d
 #
+{% if elasticsearch_major_version != "6" %}
 # When executing the init script, this user will be used to run the elasticsearch service.
 # The default value is 'elasticsearch' and is declared in the init.d file.
 # Note that this setting is only used by the init script. If changed, make sure that
@@ -83,6 +84,7 @@ ES_GC_LOG_FILE={{ elasticsearch_gc_log_file }}
 # For systemd service, the user is usually configured in file /usr/lib/systemd/system/elasticsearch.service
 ES_USER={{ elasticsearch_user }}
 ES_GROUP={{ elasticsearch_group }}
+{% endif %}
 
 # The number of seconds to wait before checking if Elasticsearch started successfully as a daemon process
 ES_STARTUP_SLEEP_TIME={{ elasticsearch_startup_sleep_time }}
