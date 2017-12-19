@@ -10,6 +10,8 @@ provisioner:
   requirements_path: requirements.yml
   ansible_verbose: false
   ansible_verbosity: 2
+  ignore_paths_from_root:
+    - .kitchen
 
 platforms:
   - name: ubuntu-14.04
@@ -21,3 +23,6 @@ platforms:
 
 suites:
   - name: default
+
+transport:
+  max_ssh_sessions: 4
