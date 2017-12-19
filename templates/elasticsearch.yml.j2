@@ -24,11 +24,7 @@ node.name: {{ elasticsearch_node_name }}
 
 # Add custom attributes to the node:
 #
-{% if elasticsearch_major_version == 2 %}
-node.rack: {{ elasticsearch_node_rack }}
-{% else %}
 node.attr.rack: {{ elasticsearch_node_rack }}
-{% endif %}
 
 node.master: {{ elasticsearch_is_master_node|bool|lower }}
 node.data: {{ elasticsearch_is_data_node|bool|lower }}
@@ -47,11 +43,7 @@ path.logs: {{ elasticsearch_log_dir }}
 #
 # Lock the memory on startup:
 #
-{% if elasticsearch_major_version == 2 %}
-bootstrap.mlockall: {{ elasticsearch_bootstrap_mlockall|bool|lower }}
-{% else %}
 bootstrap.memory_lock:  {{ elasticsearch_bootstrap_memory_lock|default(true)|bool|lower }}
-{% endif %}
 
 # Make sure that the heap size is set to about half the memory available
 # on the system and that the owner of the process is allowed to use this
@@ -84,42 +76,18 @@ http.port: {{ elasticsearch_http_port }}
 # The default list of hosts is ["127.0.0.1", "[::1]"]
 #
 # discovery.zen.ping.unicast.hosts: ["host1", "host2"]
-#
-# Prevent the "split brain" by configuring the majority of nodes (total number of nodes / 2 + 1):
-#
-{% if elasticsearch_minimum_master_nodes %}
-discovery.zen.minimum_master_nodes: {{ elasticsearch_minimum_master_nodes }}
-{% endif %}
-{% if elasticsearch_discovery_zen_settings %}
-# Zen Discovery
-{% for key,value in elasticsearch_discovery_zen_settings.iteritems() %}
-{{ key }}: "{{ value }}"
-{% endfor %}
-{% endif -%}
 
-# AWS Cloud
+# AWS Cloud - ES5 only
 {% if elasticsearch_cloud_aws_settings and elasticsearch_major_version != "6" %}
 {% for key,value in elasticsearch_cloud_aws_settings.iteritems() %}
 {{ key }}: "{{ value }}"
 {% endfor %}
-{% elif elasticsearch_cloud_aws_settings and elasticsearch_major_version == "6" %}
-{% for key,value in elasticsearch_cloud_aws_settings.iteritems() if key != 'cloud.aws.region' %}
-{{ key }}: "{{ value }}"
-{% endfor %}
-discovery.ec2.endpoint: ec2.eu-west-1.amazonaws.com
 {% endif -%}
 
-{% if elasticsearch_discovery_type and elasticsearch_major_version != "6" %}
-discovery:
-  type: {{ elasticsearch_discovery_type }}
-{% elif elasticsearch_discovery_type and elasticsearch_major_version == "6" %}
-discovery.zen.hosts_provider: ec2
-{% endif -%}
-
-{% if elasticsearch_discovery_ec2_settings %}
+{% if elasticsearch_discovery %}
 # EC2 Discovery
-{% for key,value in elasticsearch_discovery_ec2_settings.iteritems() %}
-{{ key }}: "{{ value }}"
+{% for key,value in elasticsearch_discovery.iteritems() %}
+"discovery.{{ key }}": "{{ value }}"
 {% endfor %}
 {% endif %}
 #
