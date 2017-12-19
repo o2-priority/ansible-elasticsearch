@@ -3,7 +3,7 @@ Elasticsearch
 
 Ansible role to install and configure Elasticsearch.
 
-This role has been tested with Elasticsearch v2.2 only
+This role has been tested with Elasticsearch 5 and 6 only
 
 *Note:* 
 

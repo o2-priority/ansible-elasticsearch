@@ -3,6 +3,16 @@
 - name: Elasticsearch Install
   include: "install-{{ ansible_os_family|lower }}.yml"
 
+- name: Create elasticsearch default settings file
+  template:
+    src:   etc.default.elasticsearch.j2
+    dest:  "/etc/default/elasticsearch"
+    owner: root
+    group: root
+    mode:  0644
+  notify:
+    - Restart elasticsearch
+
 - name: Elasticsearch Plugins
   include: plugins.yml
 
@@ -73,12 +83,23 @@
 
 - name: Create elasticsearch logging config | Elasticsearch 5
   template:
-    src:   log4j2.properties.j2
+    src:   log4j2.properties.es5.j2
     dest:  "{{ elasticsearch_conf_dir }}/log4j2.properties"
     owner: "root"
     group: "{{ elasticsearch_group }}"
     mode:  0660
   when: elasticsearch_major_version == "5" and elasticsearch_manage_log4j
+  notify:
+    - Restart elasticsearch
+
+- name: Create elasticsearch logging config | Elasticsearch 6
+  template:
+    src:   log4j2.properties.j2
+    dest:  "{{ elasticsearch_conf_dir }}/log4j2.properties"
+    owner: "root"
+    group: "{{ elasticsearch_group }}"
+    mode:  0660
+  when: elasticsearch_major_version == "6" and elasticsearch_manage_log4j
   notify:
     - Restart elasticsearch
 
@@ -99,16 +120,6 @@
     group: "{{ elasticsearch_group }}"
     mode:  0755
     state: directory
-  notify: 
-    - Restart elasticsearch
-
-- name: Create elasticsearch default settings file
-  template: 
-    src:   etc.default.elasticsearch.j2
-    dest:  "/etc/default/elasticsearch"
-    owner: root
-    group: root
-    mode:  0644
   notify: 
     - Restart elasticsearch
 

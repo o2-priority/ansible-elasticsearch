@@ -6,7 +6,12 @@
 ES_HOME={{ elasticsearch_home_dir }}
 
 # Elasticsearch configuration directory
+{% if elasticsearch_major_version == "6" %}
+# Renamed for ES 6
+ES_PATH_CONF={{ elasticsearch_conf_dir }}
+{% else %}
 CONF_DIR={{ elasticsearch_conf_dir }}
+{% endif %}
 
 # Elasticsearch data directory
 DATA_DIR={{ elasticsearch_data_dir }}
@@ -16,31 +21,6 @@ LOG_DIR={{ elasticsearch_log_dir }}
 
 # Elasticsearch PID directory
 PID_DIR={{ elasticsearch_pid_dir }}
-
-{% if elasticsearch_major_version == 2 %}
-# Heap size defaults to 256m min, 1g max
-# Set ES_HEAP_SIZE to 50% of available RAM, but no more than 31g
-{% if elasticsearch_heap_size|default(false) %}
-ES_HEAP_SIZE={{ elasticsearch_heap_size }}
-{% else %}
-#ES_HEAP_SIZE=2g
-{% endif %}
-
-
-# Heap new generation
-{% if elasticsearch_heap_newsize|default(false) %}
-ES_HEAP_NEWSIZE={{ elasticsearch_heap_newsize }}
-{% else %}
-#ES_HEAP_NEWSIZE=
-{% endif %}
-
-# Maximum direct memory
-{% if elasticsearch_direct_size|default(false) %}
-ES_DIRECT_SIZE={{ elasticsearch_direct_size }}
-{% else %}
-#ES_DIRECT_SIZE=
-{% endif %}
-{% endif -%}
 
 # Additional Java OPTS
 {% if elasticsearch_java_opts %}
@@ -56,21 +36,13 @@ ES_RESTART_ON_UPGRADE={{ elasticsearch_restart_on_upgrade|string|lower }}
 #ES_RESTART_ON_UPGRADE=true
 {% endif %}
 
-{% if elasticsearch_major_version == 2 %}
-# Path to the GC log file
-{% if elasticsearch_use_gc_logging %}
-ES_GC_LOG_FILE={{ elasticsearch_gc_log_file }}
-{% else %}
-#ES_GC_LOG_FILE=/var/log/elasticsearch/gc.log
-{% endif %}
-{% endif %}
-
 ################################
 # Elasticsearch service
 ################################
 
 # SysV init.d
 #
+{% if elasticsearch_major_version != "6" %}
 # When executing the init script, this user will be used to run the elasticsearch service.
 # The default value is 'elasticsearch' and is declared in the init.d file.
 # Note that this setting is only used by the init script. If changed, make sure that
@@ -78,6 +50,7 @@ ES_GC_LOG_FILE={{ elasticsearch_gc_log_file }}
 # For systemd service, the user is usually configured in file /usr/lib/systemd/system/elasticsearch.service
 ES_USER={{ elasticsearch_user }}
 ES_GROUP={{ elasticsearch_group }}
+{% endif %}
 
 # The number of seconds to wait before checking if Elasticsearch started successfully as a daemon process
 ES_STARTUP_SLEEP_TIME={{ elasticsearch_startup_sleep_time }}

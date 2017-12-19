@@ -33,9 +33,6 @@ elasticsearch_signing_key_url:  "https://packages.elastic.co/GPG-KEY-elasticsear
 elasticsearch_apt_repo:         "deb https://artifacts.elastic.co/packages/{{ elasticsearch_major_version }}.x/apt stable main"
 elasticsearch_yum_repo_baseurl: "https://artifacts.elastic.co/packages/{{ elasticsearch_major_version }}.x/yum"
 
-elasticsearch_2_apt_repo:         "deb https://packages.elastic.co/elasticsearch/{{ elasticsearch_major_version }}.x/debian stable main"
-elasticsearch_2_yum_repo_baseurl: "https://packages.elastic.co/elasticsearch/{{ elasticsearch_major_version }}.x/centos"
-
 ###########
 ##  Plugins
 elasticsearch_update_plugins:  false
@@ -68,25 +65,28 @@ elasticsearch_bootstrap_memory_lock: true
 #elasticsearch_heap_size_min:              # e.g. "2g". Default is 40% of ansible_memtotal_mb
 #elasticsearch_heap_size_max:              # e.g. "2g". Default is 40% of ansible_memtotal_mb
 
-elasticsearch_discovery_type:                       # See example config below
+elasticsearch_discovery:              {}            # See example config below
 elasticsearch_cloud_aws_settings:     {}            # See example config below
-elasticsearch_discovery_ec2_settings: {}            # See example config below
-elasticsearch_discovery_zen_settings: {}            # See example config below
 elasticsearch_gateway_settings:       {}            # See example config below
 
 
 
 ###################################
-##  Example Settings configuration
+##  Example Settings configuration - ES 5
 ###################################
 ##
-## elasticsearch_discovery_type: ec2
+## elasticsearch_discovery:
+##   "zen.ping.unicast.hosts":   '[ "1.1.1.1", "2.2.2.2" ]'
+##   "zen.minimum_master_nodes": 3
+##   type: ec2
+##   "ec2.groups":          "sg1,sg2"    # comma separated list of sec group names or ids
+##   "ec2.host_type":       "private_ip" # private_ip, public_ip, private_dns, public_dns
+##   "ec2.any_group":       "true"       # true or false. Default "true"
+##   "ec2.ping_timeout":    "3s"         # Defaults to "3s"
+##   "ec2.node_cache_time": "10s"        # Defaults to "10s"
+##   "ec2.availability_zones":           # comma separated list
 ##
-## elasticsearch_discovery_zen_settings:
-##   "discovery.zen.ping.unicast.hosts":   '[ "1.1.1.1", "2.2.2.2" ]'
-##   "discovery.zen.minimum_master_nodes": 3
-## 
-## elasticsearch_cloud_aws_settings:
+## elasticsearch_cloud_aws_settings:  # ES5 only
 ##   "cloud.aws.region":               eu-west
 ##   "cloud.aws.access_key":           someAccessKey
 ##   "cloud.aws.secret_key":           someSecretKey
@@ -106,14 +106,6 @@ elasticsearch_gateway_settings:       {}            # See example config below
 ##   "cloud.aws.ec2.proxy.username":   myself2
 ##   "cloud.aws.ec2.proxy.password":   theBestPasswordEver2!
 ## 
-## elasticsearch_discovery_ec2_settings:
-##   "discovery.ec2.groups":          "sg1,sg2"    # comma separated list of sec group names or ids
-##   "discovery.ec2.host_type":       "private_ip" # private_ip, public_ip, private_dns, public_dns
-##   "discovery.ec2.any_group":       "true"       # true or false. Default "true"
-##   "discovery.ec2.ping_timeout":    "3s"         # Defaults to "3s"
-##   "discovery.ec2.node_cache_time": "10s"        # Defaults to "10s"
-##   "discovery.ec2.availability_zones":           # comma separated list
-##
 ## See docs at, http://www.elastic.co/guide/en/elasticsearch/reference/current/modules-discovery.html
 ##
 ## elasticsearch_gateway_settings:                   
@@ -121,3 +113,14 @@ elasticsearch_gateway_settings:       {}            # See example config below
 ##
 ## See docs at, https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-gateway.html
 
+
+###################################
+##  Example Settings configuration - ES 6
+###################################
+## elasticsearch_discovery:
+##   "ec2.endpoint": ec2.eu-west-1.amazonaws.com
+##   "zen.hosts_provider": ec2
+##   "zen.minimum_master_nodes": 2
+##   "ec2.tag.MachineRole": elasticsearch
+
+## See docs at, http://www.elastic.co/guide/en/elasticsearch/reference/current/modules-discovery.html
