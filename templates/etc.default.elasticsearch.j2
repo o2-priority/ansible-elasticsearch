@@ -22,31 +22,6 @@ LOG_DIR={{ elasticsearch_log_dir }}
 # Elasticsearch PID directory
 PID_DIR={{ elasticsearch_pid_dir }}
 
-{% if elasticsearch_major_version == "2" %}
-# Heap size defaults to 256m min, 1g max
-# Set ES_HEAP_SIZE to 50% of available RAM, but no more than 31g
-{% if elasticsearch_heap_size|default(false) %}
-ES_HEAP_SIZE={{ elasticsearch_heap_size }}
-{% else %}
-#ES_HEAP_SIZE=2g
-{% endif %}
-
-
-# Heap new generation
-{% if elasticsearch_heap_newsize|default(false) %}
-ES_HEAP_NEWSIZE={{ elasticsearch_heap_newsize }}
-{% else %}
-#ES_HEAP_NEWSIZE=
-{% endif %}
-
-# Maximum direct memory
-{% if elasticsearch_direct_size|default(false) %}
-ES_DIRECT_SIZE={{ elasticsearch_direct_size }}
-{% else %}
-#ES_DIRECT_SIZE=
-{% endif %}
-{% endif -%}
-
 # Additional Java OPTS
 {% if elasticsearch_java_opts %}
 ES_JAVA_OPTS="{{ elasticsearch_java_opts|join(' ') }}"
@@ -59,15 +34,6 @@ ES_JAVA_OPTS="{{ elasticsearch_java_opts|join(' ') }}"
 ES_RESTART_ON_UPGRADE={{ elasticsearch_restart_on_upgrade|string|lower }}
 {% else %}
 #ES_RESTART_ON_UPGRADE=true
-{% endif %}
-
-{% if elasticsearch_major_version == "2" %}
-# Path to the GC log file
-{% if elasticsearch_use_gc_logging %}
-ES_GC_LOG_FILE={{ elasticsearch_gc_log_file }}
-{% else %}
-#ES_GC_LOG_FILE=/var/log/elasticsearch/gc.log
-{% endif %}
 {% endif %}
 
 ################################
