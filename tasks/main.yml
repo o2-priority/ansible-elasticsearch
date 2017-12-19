@@ -83,7 +83,7 @@
 
 - name: Create elasticsearch logging config | Elasticsearch 5
   template:
-    src:   log4j2.properties.j2
+    src:   log4j2.properties.es5.j2
     dest:  "{{ elasticsearch_conf_dir }}/log4j2.properties"
     owner: "root"
     group: "{{ elasticsearch_group }}"
@@ -94,7 +94,7 @@
 
 - name: Create elasticsearch logging config | Elasticsearch 6
   template:
-    src:   log4j2.properties.es6.j2
+    src:   log4j2.properties.j2
     dest:  "{{ elasticsearch_conf_dir }}/log4j2.properties"
     owner: "root"
     group: "{{ elasticsearch_group }}"
