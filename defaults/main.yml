@@ -15,7 +15,7 @@ elasticsearch_gc_log_file: "{{ elasticsearch_log_dir }}/gc.log"
 elasticsearch_javacmd:    /usr/bin/java
 elasticsearch_java_opts:  []
 elasticsearch_heap_size:
-elasticsearch_heap_newsize: 
+elasticsearch_heap_newsize:
 elasticsearch_direct_size:
 elasticsearch_restart_on_upgrade: false
 elasticsearch_startup_sleep_time: 5
@@ -23,6 +23,8 @@ elasticsearch_max_open_files:     65536
 elasticsearch_max_locked_memory:  unlimited
 elasticsearch_max_map_count:      262144
 elasticsearch_use_gc_logging:     false
+elasticsearch_service_overrides:
+  - { key: LimitMEMLOCK, value: infinity }
 
 ############
 ##  Package
@@ -105,10 +107,10 @@ elasticsearch_gateway_settings:       {}            # See example config below
 ##   "cloud.aws.ec2.proxy.port":       8083
 ##   "cloud.aws.ec2.proxy.username":   myself2
 ##   "cloud.aws.ec2.proxy.password":   theBestPasswordEver2!
-## 
+##
 ## See docs at, http://www.elastic.co/guide/en/elasticsearch/reference/current/modules-discovery.html
 ##
-## elasticsearch_gateway_settings:                   
+## elasticsearch_gateway_settings:
 ##   "gateway.recover_after_nodes": 3s
 ##
 ## See docs at, https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-gateway.html

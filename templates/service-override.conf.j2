@@ -1,0 +1,4 @@
+[Service]
+{% for o in elasticsearch_service_overrides %}
+{{ o.key }}={{ o.value }}
+{% endfor %}

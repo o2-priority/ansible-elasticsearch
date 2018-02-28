@@ -74,9 +74,22 @@ end
   end
 end
 
-describe file('/etc/init.d/elasticsearch') do
-  it { should be_executable }
-  it { should be_owned_by 'root' }
+if os[:family] == 'ubuntu' and os[:release] == '14.04'
+    describe file('/etc/init.d/elasticsearch') do
+      it { should be_executable }
+      it { should be_owned_by 'root' }
+    end
+else
+  %W(
+    /usr/lib/systemd/system/elasticsearch.service
+    /etc/systemd/system/elasticsearch.service.d/elasticsearch.conf
+  ).each do |f|
+    describe file(f) do
+      it { should be_file }
+      it { should be_mode 644 }
+      it { should be_owned_by 'root' }
+    end
+  end
 end
 
 describe service('elasticsearch') do
