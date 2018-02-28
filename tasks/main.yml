@@ -23,62 +23,60 @@
   with_items: "{{ elasticsearch_plugins }}"
 
 - name: Ensure elasticsearch home dir is created
-  file: 
-    path:  "{{ elasticsearch_home_dir }}" 
+  file:
+    path:  "{{ elasticsearch_home_dir }}"
     owner: "root"
     group: "root"
     mode:  0755
     state: directory
 
 - name: Ensure elasticsearch data dir is created
-  file: 
-    path:  "{{ elasticsearch_data_dir }}" 
+  file:
+    path:  "{{ elasticsearch_data_dir }}"
     owner: "{{ elasticsearch_user }}"
     group: "{{ elasticsearch_group }}"
     mode:  0755
     state: directory
 
 - name: Ensure elasticsearch conf dir is created
-  file: 
-    path:  "{{ elasticsearch_conf_dir }}" 
+  file:
+    path:  "{{ elasticsearch_conf_dir }}"
     owner: "root"
     group: "{{ elasticsearch_group }}"
     mode:  0755
     state: directory
 
 - name: Create elasticsearch config
-  template: 
+  template:
     src:   elasticsearch.yml.j2
     dest:  "{{ elasticsearch_conf_dir }}/elasticsearch.yml"
     owner: "root"
     group: "{{ elasticsearch_group }}"
     mode:  0644
-  notify: 
+  notify:
     - Restart elasticsearch
 
 ## new in 5.x
 - name: Create elasticsearch jvm options config
-  template: 
+  template:
     src:   jvm.options.j2
     dest:  "{{ elasticsearch_conf_dir }}/jvm.options"
     owner: "root"
     group: "{{ elasticsearch_group }}"
     mode:  0644
   when: elasticsearch_major_version >= 5
-  notify: 
+  notify:
     - Restart elasticsearch
 
-#- pause: minutes=10
-
 - name: Create elasticsearch logging config | Elasticsearch < 5
-  copy: 
+  copy:
     src:   logging.yml
     dest:  "{{ elasticsearch_conf_dir }}/logging.yml"
     owner: "root"
     group: "{{ elasticsearch_group }}"
     mode:  0644
   when: elasticsearch_major_version < 5
-  notify: 
+  notify:
     - Restart elasticsearch
 
 - name: Create elasticsearch logging config | Elasticsearch 5
@@ -104,29 +102,63 @@
     - Restart elasticsearch
 
 - name: Create elasticsearch scripts dir
-  file: 
+  file:
     path:  "{{ elasticsearch_scripts_dir }}"
     owner: "root"
     group: "{{ elasticsearch_group }}"
     mode:  0755
     state: directory
-  notify: 
+  notify:
     - Restart elasticsearch
 
 - name: Create elasticsearch log dir
-  file: 
+  file:
     path:  "{{ elasticsearch_log_dir }}"
     owner: "{{ elasticsearch_user }}"
     group: "{{ elasticsearch_group }}"
     mode:  0755
     state: directory
-  notify: 
+  notify:
     - Restart elasticsearch
+
+- name: Create elasticsearch systemd units override dir
+  file:
+    path:  "/etc/systemd/system/elasticsearch.service.d"
+    owner: "root"
+    group: "root"
+    mode:  0755
+    state: directory
+  when: ansible_service_mgr == 'systemd' and elasticsearch_service_overrides
+
+- name: Create elasticsearch systemd units override conf file
+  template:
+    src:   service-override.conf.j2
+    dest:  "/etc/systemd/system/elasticsearch.service.d/elasticsearch.conf"
+    owner: "root"
+    group: "root"
+    mode:  0644
+  when: ansible_service_mgr == 'systemd' and elasticsearch_service_overrides
+  register: override
+  notify:
+    - Restart elasticsearch
+
+- name: Remove elasticsearch systemd units override dir if none to configure
+  file:
+    path:  "/etc/systemd/system/elasticsearch.service.d"
+    state: absent
+  when: ansible_service_mgr == 'systemd' and not elasticsearch_service_overrides
+  register: override_rm
+  notify:
+    - Restart elasticsearch
+
+- name: Reload systemd for elasticsearch service
+  command: systemctl daemon-reload
+  when: override|changed or override_rm|changed
 
 - name: Start elasticsearch
   service: name=elasticsearch enabled=yes state=started
 
 - name: Wait for elasticsearch to start
-  wait_for: 
+  wait_for:
     host: "{{ elasticsearch_network_host }}"
     port: "{{ elasticsearch_http_port }}"
