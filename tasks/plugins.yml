@@ -4,16 +4,22 @@
   shell: >
       {{ elasticsearch_plugin_cmd }} list {{ _list_plugins_cmd_filter|default('') }}
   register: plugins
-  
+
 - debug: msg="Installed plugins - {{ plugins.stdout_lines|join(', ') }}"
+
+- name: Remove installed elasticsearch plugins before update
+  shell: >
+      {{ elasticsearch_plugin_cmd }} remove {{ item }}
+  with_items: "{{ elasticsearch_plugins_install|intersect(plugins.stdout_lines) }}"
+  when: elasticsearch_update_plugins
 
 - name: Install elasticsearch plugins
   shell: >
       {{ elasticsearch_plugin_cmd }} install {{ item }}
   with_items: "{{ elasticsearch_plugins_install }}"
-  when: item not in plugins.stdout_lines and item not in elasticsearch_plugins_remove
+  when: item not in elasticsearch_plugins_remove|union(plugins.stdout_lines)
 
-- name: Remove elasticsearch plugins
+- name: Ensure elasticsearch plugins to be removed are removed
   shell: >
       {{ elasticsearch_plugin_cmd }} remove {{ item }}
   with_items: "{{ elasticsearch_plugins_remove }}"
