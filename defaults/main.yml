@@ -37,8 +37,8 @@ elasticsearch_yum_repo_baseurl: "https://artifacts.elastic.co/packages/{{ elasti
 
 ###########
 ##  Plugins
-elasticsearch_update_plugins:  false
-elasticsearch_plugins:         []
+elasticsearch_update_plugins:  true
+elasticsearch_plugins:         [x-pack]
 elasticsearch_plugins_install: "{{ elasticsearch_plugins|default([]) }}"
 elasticsearch_plugins_remove:  []
 elasticsearch_plugin_cmd:      "{{ elasticsearch_home_dir }}/bin/elasticsearch-plugin"

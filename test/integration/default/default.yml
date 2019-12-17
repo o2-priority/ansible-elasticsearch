@@ -2,14 +2,19 @@
 - hosts: test-kitchen
 
   vars:
-    java_package: oracle-java8-installer
-    elasticsearch_plugins_install: [ discovery-ec2, repository-s3, analysis-icu ]
+    elasticsearch_plugins_install: [ discovery-ec2, repository-s3, analysis-icu, x-pack ]
     elasticsearch_plugins_remove:  [ analysis-icu, discovery-file ]
     elasticsearch_update_plugins:  true
     elasticsearch_cluster_name: kitchenCluster
 
+    elasticsearch_discovery:
+        "type": "single-node"
+    elasticsearch_version: 6.2.2
+    elasticsearch_curator_version: 5.6.0
+
+
   roles:
-    - wunzeco.java
+    - o2-priority.java
     - ansible-elasticsearch
 
   post_tasks:
