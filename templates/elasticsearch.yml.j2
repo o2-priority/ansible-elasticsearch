@@ -90,6 +90,11 @@ http.port: {{ elasticsearch_http_port }}
 "discovery.{{ key }}": "{{ value }}"
 {% endfor %}
 {% endif %}
+# Enable xpack reporting and  disable the rest
+xpack.security.enabled: false
+xpack.ml.enabled: false
+xpack.monitoring.enabled: false
+xpack.watcher.enabled: false
 #
 # For more information, see the documentation at:
 # <http://www.elastic.co/guide/en/elasticsearch/reference/current/modules-discovery.html>
