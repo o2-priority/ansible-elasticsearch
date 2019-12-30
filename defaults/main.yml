@@ -43,6 +43,13 @@ elasticsearch_plugins_install: "{{ elasticsearch_plugins|default([]) }}"
 elasticsearch_plugins_remove:  []
 elasticsearch_plugin_cmd:      "{{ elasticsearch_home_dir }}/bin/elasticsearch-plugin"
 
+### Xpack related features ###
+elasticsearch_xpack_security: false
+elasticsearch_xpack_ml: false
+elasticsearch_xpack_watcher: false
+elasticsearch_xpack_monitoring: false
+
+
 ###########
 ##  Config
 elasticsearch_cluster_name:       # Mandatory
