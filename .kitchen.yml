@@ -1,36 +1,42 @@
 ---
 driver:
-  name: vagrant
-  customize:
-    memory: 1024
+  name: docker
 
 provisioner:
   name: ansible_playbook
   hosts: test-kitchen
   requirements_path: requirements.yml
-  require_pip: true
-  require_ansible_repo: false
-  ansible_version:  2.3.0.0
-  ansible_verbose:  false
-  ansible_verbosity: 2
-  ansible_diff: true
+  require_chef_for_busser: false
+  require_ansible_omnibus: false
+  ansible_version: 2.7.15-1ppa~trusty
+  ansible_verbose: false
+  ansible_verbosity: 3
   ansible_extra_flags: <%= ENV['ANSIBLE_EXTRA_FLAGS'] %>
   ignore_paths_from_root:
     - .kitchen
+  ssh_known_hosts:
+    - github.com
 
 platforms:
   - name: ubuntu-14.04
-    driver:
-      box: bento/ubuntu-14.04
-  - name: ubuntu-16.04
-    driver:
-      box: bento/ubuntu-16.04
-  - name: centos-7.2
-    driver:
-      box: bento/centos-7.2
+    driver_config:
+      image: ubuntu:14.04
+      platform: ubuntu
+      privileged: true
+      provision_command:
+        - apt-get update
+        - apt-get install -y software-properties-common apt-transport-https
+        - add-apt-repository ppa:ansible/ansible-2.7
+        - apt-get update
+        - apt-get install -y python-pip python-openssl python-pyasn1
+        - pip install ndg-httpsclient passlib
+        - curl -s -L https://www.chef.io/chef/install.sh | ${sudo} bash -s -- -v 12.2.1
 
 suites:
   - name: default
+    driver:
+      network:
+        - ["private_network", { ip: "10.1.1.1" }]
 
 transport:
-  max_ssh_sessions: 4
+  forward_agent: true

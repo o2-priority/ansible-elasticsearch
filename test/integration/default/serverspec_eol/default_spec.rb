@@ -1,4 +1,4 @@
-require 'spec_helper'
+require '/tmp/kitchen/spec/spec_helper.rb'
 require 'socket'
 
 elasticsearch_user     = 'elasticsearch'

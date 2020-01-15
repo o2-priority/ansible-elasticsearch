@@ -16,12 +16,6 @@
 - name: Elasticsearch Plugins
   include: plugins.yml
 
-- name: Install elasticsearch plugin
-  shell: >
-    {{ elasticsearch_plugin_cmd }} install -b {{ item }}
-  when: item not in plugins.stdout_lines
-  with_items: "{{ elasticsearch_plugins }}"
-
 - name: Ensure elasticsearch home dir is created
   file:
     path:  "{{ elasticsearch_home_dir }}"
