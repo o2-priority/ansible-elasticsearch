@@ -48,6 +48,7 @@ elasticsearch_xpack_security: false
 elasticsearch_xpack_ml: false
 elasticsearch_xpack_watcher: false
 elasticsearch_xpack_monitoring: false
+elasticsearch_xpack_license: basic
 
 
 ###########
