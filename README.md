@@ -11,6 +11,11 @@ This role has been tested with Elasticsearch 5 and 6 only
 - Discoveries supported
   - EC2 Discovery
   - Zen Discovery
+  
+Xpack plugin has been enabled for reporting purpose.
+The type of licensing we use for xpack in basic. Since we are on elasticsearch version 6.2, the basic license will have to be renewed annually for the reporting to work.
+
+Go to https://register.elastic.co/ to renew basic license.
 
 ## Examples
 
